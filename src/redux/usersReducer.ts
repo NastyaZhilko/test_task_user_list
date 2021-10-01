@@ -34,11 +34,6 @@ export const usersReducer = (state: InitialStateType = initialState, action: Act
             return {...state, users: action.filteredUsers, inputValueSearch: action.inputValueSearch}
 
         }
-        case 'APP/RESET':{
-
-            return {...state, inputValueSearch: action.inputValueSearch}
-
-        }
         default:
             return state;
     }
@@ -48,13 +43,11 @@ type ActionsTypes = ReturnType<typeof errorDetectedAC>
     | ReturnType<typeof setUser>
     | ReturnType<typeof deleteUser>
     | ReturnType<typeof searchedUsersAC>
-    | ReturnType<typeof resetAC>
 
 
 export const errorDetectedAC = (error: string | null) => ({type: 'APP/ERROR_DETECTED', payload: {error}} as const)
 export const setUser = (users: Array<UsersType>) => ({type: 'APP/SET_USERS', payload: {users}} as const)
 export const deleteUser = (userId: number) => ({type: 'APP/DELETE_USER', payload: {userId}} as const)
-export const resetAC = (inputValueSearch: string) => ({type: 'APP/RESET', inputValueSearch} as const)
 export const searchedUsersAC = (filteredUsers: Array<UsersType>, inputValueSearch: string) =>
     ({type: 'APP/SEARCHED-USERS', filteredUsers,  inputValueSearch } as const)
 
@@ -88,18 +81,4 @@ export const changeInputTC = (e: ChangeEvent<HTMLInputElement>)=> async (dispatc
     }
 }
 
-
-export const resetTC = () => async (dispatch: Dispatch) => {
-
-    try {
-        const response  = await api.getUsers();
-        const filteredUsers = response.data
-        const inputValueSearch = ''
-        dispatch(searchedUsersAC(filteredUsers, inputValueSearch))
-
-    } catch (error) {
-        // @ts-ignore
-        dispatch(errorDetectedAC(error))
-    }
-}
 

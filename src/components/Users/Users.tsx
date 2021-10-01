@@ -3,8 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import styles from './Users.module.css';
 import {AppStateType} from '../../redux/store';
 import User from "./User/User";
-import {getUsersTC, resetTC} from "../../redux/usersReducer";
-import {Search} from "../Search/Search";
+import {getUsersTC} from "../../redux/usersReducer";
 import {UsersType} from "../../api/Api";
 
 const Users = () => {
@@ -27,7 +26,6 @@ const Users = () => {
     return (
         <div className={styles.container}>
             <h2>Users</h2>
-           {/* <Search/>*/}
             <input
                 type={'search'}
                 placeholder="Искать сообщение"
