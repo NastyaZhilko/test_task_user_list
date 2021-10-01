@@ -3,10 +3,30 @@ import style from "./User.module.css"
 import {deleteUser} from "../../../redux/usersReducer";
 import {useDispatch} from "react-redux";
 import Modal from "../../../common/components/Modal/Modal";
-import {UsersType} from "../../../api/Api";
+import Highlighter from "react-highlight-words"
 
-
-const User: FC<UsersType> = React.memo((props: UsersType) => {
+type PropsType ={
+    id: number
+    name: string
+    username: string
+    email: string
+    address: {
+        street: string
+        suite: string
+        city: string
+        zipcode: string
+        geo: {lat: string, lng: string}
+    }
+    phone: string
+    website: string
+    company:  {
+        name: string
+        catchPhrase: string
+        bs: string
+    }
+    searchText: string
+}
+const User: FC<PropsType> = React.memo((props: PropsType) => {
     const [open, setOpen] = useState(false)
     const dispatch = useDispatch();
 
@@ -20,9 +40,26 @@ const User: FC<UsersType> = React.memo((props: UsersType) => {
             <div className={style.block} onClick={() => {
                 setOpen(true)
             }}>
-                <div> Name: {props.name}  </div>
-                <div> UserName: {props.username} </div>
-                <div> Email: {props.email} </div>
+
+
+                <div> Name: <Highlighter
+                    highlightClassName="highlight"
+                    searchWords={[props.searchText]}
+                    autoEscape={true}
+                    textToHighlight={props.name}
+                />  </div>
+                <div> UserName: <Highlighter
+                    highlightClassName="highlight"
+                    searchWords={[props.searchText]}
+                    autoEscape={true}
+                    textToHighlight={props.username}
+                /> </div>
+                <div> Email: <Highlighter
+                    highlightClassName="highlight"
+                    searchWords={[props.searchText]}
+                    autoEscape={true}
+                    textToHighlight={props.email}
+                /> </div>
                 <div>
                     <button onClick={removeEmployee}>Delete</button>
                 </div>

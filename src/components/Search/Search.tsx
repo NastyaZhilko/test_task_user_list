@@ -1,10 +1,17 @@
-import React from 'react';
+import React, {ChangeEvent} from 'react'
+import {useDispatch} from "react-redux";
+import {changeInputTC} from "../../redux/usersReducer";
 
 
-export const Search = () => {
+export function Search() {
+    const dispatch = useDispatch()
 
-    return <div>
-        <input placeholder="search"
-               value="search"/>
-    </div>
+    const changeInput = (e: ChangeEvent<HTMLInputElement>) => {
+        dispatch(changeInputTC(e))
+    }
+    return (
+        <div>
+            <input type={'search'} placeholder='Search' onChange={changeInput}/>
+        </div>
+    )
 }
