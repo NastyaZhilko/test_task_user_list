@@ -11,7 +11,7 @@ export function Search() {
     }
     return (
         <div>
-            <input type={'search'} placeholder='Search' onChange={changeInput}/>
+            <input type={'search'} placeholder='Search...' onChange={changeInput}/>
         </div>
     )
 }
