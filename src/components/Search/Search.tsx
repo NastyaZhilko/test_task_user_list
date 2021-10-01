@@ -5,7 +5,7 @@ import {changeInputTC} from "../../redux/usersReducer";
 
 export function Search() {
     const dispatch = useDispatch()
-
+//альтернатива
     const changeInput = (e: ChangeEvent<HTMLInputElement>) => {
         dispatch(changeInputTC(e))
     }
