@@ -1,5 +1,6 @@
 {
   "name": "test_task_user_list",
+  "homepage": "https://nastyazhilko.github.io/test_task_user_list/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
