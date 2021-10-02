@@ -33,3 +33,9 @@
 .modal_content.active {
     transform: scale(1);
 }
+@media screen and (max-width: 543px){
+    .modal_content{
+        height: 80%;
+        width: 85%
+    }
+}

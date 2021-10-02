@@ -1,39 +1,32 @@
-import React, {ChangeEvent, useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import styles from './Users.module.css';
 import {AppStateType} from '../../redux/store';
 import User from "./User/User";
-import {getUsersTC} from "../../redux/usersReducer";
+import {getUsersTC, setInputValue} from "../../redux/usersReducer";
 import {UsersType} from "../../api/Api";
 import {Search} from "../Search/Search";
+
 
 const Users = () => {
 
     const dispatch = useDispatch();
     const users = useSelector<AppStateType, Array<UsersType>>(state => state.users.users);
-    const [searchText, setSearchText] = useState('')
+    const inputSearch = useSelector<AppStateType, string>(state => state.users.inputValueSearch)
+
     useEffect(() => {
         dispatch(getUsersTC())
     }, [dispatch])
 
     const onClickReset = () => {
         dispatch(getUsersTC())
-        setSearchText('')
-    }
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>)=>{
-        setSearchText(e.target.value)
+        dispatch(setInputValue(''))
     }
 
     return (
         <div className={styles.container}>
             <h2>Users</h2>
-            <Search/>
-            <input
-                type={'search'}
-                placeholder="Search..."
-                value={searchText}
-                onChange={onChangeHandler}
-            />
+            <Search searchText={inputSearch}/>
             <div>
                 <button onClick={onClickReset}>Reset</button>
             </div>
@@ -52,7 +45,7 @@ const Users = () => {
                           phone={user.phone}
                           website={user.website}
                           company={user.company}
-                          searchText={searchText}
+                          searchText={inputSearch}
                     />
                 ))}
             </div>

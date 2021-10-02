@@ -1,6 +1,6 @@
 import React, {FC, useState} from "react";
 import style from "./User.module.css"
-import {deleteUser} from "../../../redux/usersReducer";
+import {deleteUserAC} from "../../../redux/usersReducer";
 import {useDispatch} from "react-redux";
 import Modal from "../../../common/components/Modal/Modal";
 import Highlighter from "react-highlight-words"
@@ -31,7 +31,7 @@ const User: FC<PropsType> = React.memo((props: PropsType) => {
     const dispatch = useDispatch();
 
     const removeEmployee = () => {
-        dispatch(deleteUser(props.id))
+        dispatch(deleteUserAC(props.id))
     }
 
     return (
@@ -40,7 +40,6 @@ const User: FC<PropsType> = React.memo((props: PropsType) => {
             <div className={style.block} onClick={() => {
                 setOpen(true)
             }}>
-
 
                 <div> Name: <Highlighter
                     highlightClassName="highlight"

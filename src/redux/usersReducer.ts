@@ -3,7 +3,6 @@ import {api, UsersType} from "../api/Api";
 import {ChangeEvent} from "react";
 
 
-
 type InitialStateType = {
     error: string | null
     users: Array<UsersType>
@@ -13,26 +12,33 @@ type InitialStateType = {
 const initialState: InitialStateType = {
     error: null,
     users: [],
-    inputValueSearch:''
+    inputValueSearch: ''
 }
 
 export const usersReducer = (state: InitialStateType = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
         case 'APP/ERROR_DETECTED':
+            return {
+                ...state,
+                error: action.error
+            }
         case 'APP/SET_USERS':
-            return ({
+            return {
                 ...state,
-                ...action.payload
-            });
+                users: action.users
+            };
         case 'APP/DELETE_USER':
-            return ({
+            return {
                 ...state,
-                users: [...state.users.filter(u => u.id !== action.payload.userId)]
-            })
-        case 'APP/SEARCHED-USERS':{
-
+                users: [...state.users.filter(u => u.id !== action.userId)]
+            }
+        case 'APP/SEARCHED-USERS': {
             return {...state, users: action.filteredUsers, inputValueSearch: action.inputValueSearch}
 
+        }
+
+        case 'APP/SET_INPUT_VALUE': {
+            return {...state, inputValueSearch: action.inputValue}
         }
         default:
             return state;
@@ -40,44 +46,44 @@ export const usersReducer = (state: InitialStateType = initialState, action: Act
 }
 
 type ActionsTypes = ReturnType<typeof errorDetectedAC>
-    | ReturnType<typeof setUser>
-    | ReturnType<typeof deleteUser>
+    | ReturnType<typeof setUserAC>
+    | ReturnType<typeof deleteUserAC>
     | ReturnType<typeof searchedUsersAC>
+    | ReturnType<typeof setInputValue>
 
-
-export const errorDetectedAC = (error: string | null) => ({type: 'APP/ERROR_DETECTED', payload: {error}} as const)
-export const setUser = (users: Array<UsersType>) => ({type: 'APP/SET_USERS', payload: {users}} as const)
-export const deleteUser = (userId: number) => ({type: 'APP/DELETE_USER', payload: {userId}} as const)
+//action creators
+export const errorDetectedAC = (error: string | null) => ({type: 'APP/ERROR_DETECTED', error} as const)
+export const setUserAC = (users: Array<UsersType>) => ({type: 'APP/SET_USERS',  users} as const)
+export const deleteUserAC = (userId: number) => ({type: 'APP/DELETE_USER', userId} as const)
 export const searchedUsersAC = (filteredUsers: Array<UsersType>, inputValueSearch: string) =>
-    ({type: 'APP/SEARCHED-USERS', filteredUsers,  inputValueSearch } as const)
+    ({type: 'APP/SEARCHED-USERS', filteredUsers, inputValueSearch} as const)
+export const setInputValue = (inputValue:string) => ({type: 'APP/SET_INPUT_VALUE', inputValue} as const)
 
 
+//thunk creators
 export const getUsersTC = () => async (dispatch: Dispatch) => {
-
     try {
-        const response  = await api.getUsers();
-        dispatch(setUser(response.data));
+        const response = await api.getUsers();
+        dispatch(setUserAC(response.data));
     } catch (error) {
-        // @ts-ignore
-        dispatch(errorDetectedAC(error))
+        dispatch(errorDetectedAC('Error'))
     }
 }
 
-export const changeInputTC = (e: ChangeEvent<HTMLInputElement>)=> async (dispatch: Dispatch) =>{
+export const changeInputTC = (e: ChangeEvent<HTMLInputElement>) => async (dispatch: Dispatch) => {
+    dispatch(setInputValue(e.currentTarget.value))
     try {
-        const response  = await api.getUsers();
+        const response = await api.getUsers();
         const users = response.data
         const inputValueSearch = e.target.value.toLowerCase().trim()
-        const filteredUsers = users.filter((user: UsersType)=>{
+        const filteredUsers = users.filter((user: UsersType) => {
             return user.name.toLowerCase().indexOf(e.target.value.toLowerCase().trim()) !== -1
-            || user.username.toLowerCase().indexOf(e.target.value.toLowerCase().trim()) !== -1
-            || user.email.toLowerCase().indexOf(e.target.value.toLowerCase().trim()) !== -1
+                || user.username.toLowerCase().indexOf(e.target.value.toLowerCase().trim()) !== -1
+                || user.email.toLowerCase().indexOf(e.target.value.toLowerCase().trim()) !== -1
         })
         dispatch(searchedUsersAC(filteredUsers, inputValueSearch))
-        console.log(inputValueSearch)
     } catch (error) {
-        // @ts-ignore
-        dispatch(errorDetectedAC(error))
+        dispatch(errorDetectedAC('Error'))
     }
 }
 
