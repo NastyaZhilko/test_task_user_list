@@ -5,6 +5,7 @@ import {AppStateType} from '../../redux/store';
 import User from "./User/User";
 import {getUsersTC} from "../../redux/usersReducer";
 import {UsersType} from "../../api/Api";
+import {Search} from "../Search/Search";
 
 const Users = () => {
 
@@ -26,9 +27,10 @@ const Users = () => {
     return (
         <div className={styles.container}>
             <h2>Users</h2>
+            <Search/>
             <input
                 type={'search'}
-                placeholder="Искать сообщение"
+                placeholder="Search..."
                 value={searchText}
                 onChange={onChangeHandler}
             />
